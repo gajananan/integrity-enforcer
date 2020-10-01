@@ -1,0 +1,389 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Development · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="README_IE_OPERATOR_CR.html" />
+    
+    
+    <link rel="prev" href="README_DEPLOY_IE_LOCAL.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="README_OVERVIEW.html">
+            
+                <a href="README_OVERVIEW.html">
+            
+                    
+                    Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="README_QUICK.html">
+            
+                <a href="README_QUICK.html">
+            
+                    
+                    Quick Start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="README_FOR_RESOURCE_PROTECTION_PROFILE.html">
+            
+                <a href="README_FOR_RESOURCE_PROTECTION_PROFILE.html">
+            
+                    
+                    Define Protected Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="README_CONFIG_SIGNER_POLICY.html">
+            
+                <a href="README_CONFIG_SIGNER_POLICY.html">
+            
+                    
+                    Sign Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="README_RESOURCE_SIGNATURE.html">
+            
+                <a href="README_RESOURCE_SIGNATURE.html">
+            
+                    
+                    How to Sign Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="README_DEPLOY_IE_LOCAL.html">
+            
+                <a href="README_DEPLOY_IE_LOCAL.html">
+            
+                    
+                    Deploy IE on Minikube
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.8" data-path="README_DEVELOPMENT.html">
+            
+                <a href="README_DEVELOPMENT.html">
+            
+                    
+                    Development
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="README_IE_OPERATOR_CR.html">
+            
+                <a href="README_IE_OPERATOR_CR.html">
+            
+                    
+                    Integity Enforcer Custom Resource
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="README_SAMPLE_TEKTON_SIGNING_PIPELINE.html">
+            
+                <a href="README_SAMPLE_TEKTON_SIGNING_PIPELINE.html">
+            
+                    
+                    Example: Tekton Signing Pipeline
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Development</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="development">Development</h1>
+<h2 id="clone-repo">Clone Repo</h2>
+<pre><code>$ git clone git@github.ibm.com:mutation-advisor/integrity-enforcer.git
+$ cd integrity-enforcer
+</code></pre><h2 id="setup">Setup</h2>
+<p>Before executing the script, setup local environment as follows:</p>
+<ul>
+<li><code>IE_ENV</code>: set <code>remote</code> for deploying IE on OpenShift or ROKS clusters. (use <a href="README_DEPLOY_IE_LOCAL.html">guide</a> for deploying IE in minikube)</li>
+<li><code>IE_NS</code>: set a namespace where IE to be deployed (use <code>integrity-enforcer-ns</code> in this doc)</li>
+<li><code>IE_REPO_ROOT</code>: set absolute path of the root directory of cloned integrity-enforcer source repository</li>
+</ul>
+<p>For example</p>
+<pre><code>$ export IE_ENV=remote
+$ export IE_NS=integrity-enforcer-ns
+$ export IE_REPO_ROOT=/repo/integrity-enforcer
+</code></pre><h2 id="scripts">Scripts</h2>
+<h3 id="build">Build</h3>
+<pre><code>$ ./develop/scripts/build_images.sh
+</code></pre><p>Three images are built.</p>
+<ul>
+<li><code>integrity-enforcer-operator</code> is image for operator which manages Integrity Enforcer</li>
+<li><code>ie-server</code> is image for IE server</li>
+<li><code>ie-logging</code> is image for IE logging side car</li>
+</ul>
+<h3 id="push-images">Push images</h3>
+<pre><code>$ ./develop/scripts/push_images.sh
+</code></pre><p>You may need to setup image registry (e.g. dockerhub, quay.io etc.) and change the container images&apos; name and tag as needed</p>
+<h3 id="install-ie-to-cluster">Install IE to cluster</h3>
+<pre><code>$ ./scripts/install_enforcer.sh
+</code></pre><p>This script includes the steps for</p>
+<ul>
+<li>Create CRDs</li>
+<li>Install Integrity Enforcer operator</li>
+<li>Install Integrity Enforcer custom resource (operator installs IE server automatically)</li>
+</ul>
+<h3 id="uninstall-ie-from-cluster">Uninstall IE from cluster</h3>
+<pre><code>$ ./scripts/delete_enforcer.sh
+</code></pre><p>This script includes the steps for</p>
+<ul>
+<li>Delete Integrity Enforcer custom resource (operator installs IE server automatically)</li>
+<li>Delete Integrity Enforcer operator</li>
+<li>Delete CRDs</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="README_DEPLOY_IE_LOCAL.html" class="navigation navigation-prev " aria-label="Previous page: Deploy IE on Minikube">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="README_IE_OPERATOR_CR.html" class="navigation navigation-next " aria-label="Next page: Integity Enforcer Custom Resource">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Development","level":"1.8","depth":1,"next":{"title":"Integity Enforcer Custom Resource","level":"1.9","depth":1,"path":"README_IE_OPERATOR_CR.md","ref":"README_IE_OPERATOR_CR.md","articles":[]},"previous":{"title":"Deploy IE on Minikube","level":"1.7","depth":1,"path":"README_DEPLOY_IE_LOCAL.md","ref":"README_DEPLOY_IE_LOCAL.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_DEVELOPMENT.md","mtime":"2020-10-01T02:46:40.992Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-10-01T02:47:45.613Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-hide-published-with/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

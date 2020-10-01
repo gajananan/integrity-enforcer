@@ -1,0 +1,466 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Integity Enforcer Custom Resource · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="README_SAMPLE_TEKTON_SIGNING_PIPELINE.html" />
+    
+    
+    <link rel="prev" href="README_DEVELOPMENT.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="README_OVERVIEW.html">
+            
+                <a href="README_OVERVIEW.html">
+            
+                    
+                    Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="README_QUICK.html">
+            
+                <a href="README_QUICK.html">
+            
+                    
+                    Quick Start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="README_FOR_RESOURCE_PROTECTION_PROFILE.html">
+            
+                <a href="README_FOR_RESOURCE_PROTECTION_PROFILE.html">
+            
+                    
+                    Define Protected Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="README_CONFIG_SIGNER_POLICY.html">
+            
+                <a href="README_CONFIG_SIGNER_POLICY.html">
+            
+                    
+                    Sign Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="README_RESOURCE_SIGNATURE.html">
+            
+                <a href="README_RESOURCE_SIGNATURE.html">
+            
+                    
+                    How to Sign Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="README_DEPLOY_IE_LOCAL.html">
+            
+                <a href="README_DEPLOY_IE_LOCAL.html">
+            
+                    
+                    Deploy IE on Minikube
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="README_DEVELOPMENT.html">
+            
+                <a href="README_DEVELOPMENT.html">
+            
+                    
+                    Development
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.9" data-path="README_IE_OPERATOR_CR.html">
+            
+                <a href="README_IE_OPERATOR_CR.html">
+            
+                    
+                    Integity Enforcer Custom Resource
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.10" data-path="README_SAMPLE_TEKTON_SIGNING_PIPELINE.html">
+            
+                <a href="README_SAMPLE_TEKTON_SIGNING_PIPELINE.html">
+            
+                    
+                    Example: Tekton Signing Pipeline
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Integity Enforcer Custom Resource</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="custom-resource-integrityenforcer">Custom Resource: IntegrityEnforcer</h1>
+<p>IE can be deployed with operator. You can configure IntegrityEnforcer custom resource to define the configuration of IE.</p>
+<h2 id="type-of-signature-verification">Type of Signature Verification</h2>
+<p>IE supports two modes of signature verification.</p>
+<ul>
+<li><code>pgp</code>: use <a href="https://www.gnupg.org/index.html" target="_blank">gpg key</a> for signing. certificate is not used.</li>
+<li><code>x509</code>: use signing key with X509 public key certificate.</li>
+</ul>
+<p><code>spec.verifyType</code> should be set either <code>pgp</code> (default) or <code>x509</code>.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">apiVersion:</span> research.ibm.com/v1alpha1
+<span class="hljs-attr">kind:</span> IntegrityEnforcer
+<span class="hljs-attr">metadata:</span>
+<span class="hljs-attr">  name:</span> integrity-enforcer-server
+<span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  enforcerConfig:</span>
+<span class="hljs-attr">    verifyType:</span> pgp
+</code></pre>
+<h2 id="enable-helm-plugin">Enable Helm plugin</h2>
+<p>You can enable Helm plugin to support verification of Helm provenance and integrity (<a href="https://helm.sh/docs/topics/provenance/" target="_blank">https://helm.sh/docs/topics/provenance/</a>). By enabling this, Helm package installation is verified with its provenance file.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  enforcerConfig:</span>
+<span class="hljs-attr">    policy:</span>
+<span class="hljs-attr">      plugin:</span>
+<span class="hljs-attr">      - name:</span> helm
+<span class="hljs-attr">        enabled:</span> <span class="hljs-literal">false</span>
+</code></pre>
+<h2 id="cluster-signer">Cluster signer</h2>
+<p>You can define cluster-wide signer for signing any resources on cluster.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  enforcerConfig:</span>
+<span class="hljs-attr">    signPolicy:</span>
+<span class="hljs-attr">      - namespaces:</span>
+<span class="hljs-bullet">        -</span> <span class="hljs-string">&quot;*&quot;</span>
+<span class="hljs-attr">        signers:</span>
+<span class="hljs-bullet">        -</span> <span class="hljs-string">&quot;ClusterSigner&quot;</span>
+<span class="hljs-bullet">        -</span> <span class="hljs-string">&quot;HelmClusterSigner&quot;</span>
+<span class="hljs-attr">      - scope:</span> Cluster
+<span class="hljs-attr">        signers:</span>
+<span class="hljs-bullet">        -</span> <span class="hljs-string">&quot;ClusterSigner&quot;</span>
+<span class="hljs-bullet">        -</span> <span class="hljs-string">&quot;HelmClusterSigner&quot;</span>
+<span class="hljs-attr">      signers:</span>
+<span class="hljs-attr">      - name:</span> <span class="hljs-string">&quot;ClusterSigner&quot;</span>
+<span class="hljs-attr">        subjects:</span>
+<span class="hljs-attr">        - commonName:</span> <span class="hljs-string">&quot;ClusterAdmin&quot;</span>
+<span class="hljs-attr">      - name:</span> <span class="hljs-string">&quot;HelmClusterSigner&quot;</span>
+<span class="hljs-attr">        subjects:</span>
+<span class="hljs-attr">        - email:</span> cluster_signer@signer.com
+</code></pre>
+<h2 id="unprocessed-requests">Unprocessed Requests</h2>
+<p>Some resources are not relevant to the signature-based protection by IE. The resources defined here are not processed in IE admission controller (always returns <code>allowed</code>).</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  enforcerConfig:</span>
+<span class="hljs-attr">    ignore:</span>
+<span class="hljs-attr">    - kind:</span> Event
+<span class="hljs-attr">    - kind:</span> Lease
+<span class="hljs-attr">    - kind:</span> Endpoints
+<span class="hljs-attr">    - kind:</span> TokenReview
+<span class="hljs-attr">    - kind:</span> SubjectAccessReview
+<span class="hljs-attr">    - kind:</span> SelfSubjectAccessReview
+</code></pre>
+<h2 id="ie-run-mode">IE Run mode</h2>
+<p>You can set run mode. Two modes are available. <code>enforce</code> mode is default. <code>detect</code> mode always allows any admission request, but signature verification is conducted and logged for all protected resources. <code>enforce</code> is set unless specified.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  enforcerConfig:</span>
+<span class="hljs-attr">    mode:</span> <span class="hljs-string">&quot;detect&quot;</span>
+</code></pre>
+<h2 id="install-on-openshift">Install on OpenShift</h2>
+<p>When deploying OpenShift cluster, this should be set <code>true</code> (default). Then, SecurityContextConstratint (SCC) will be deployed automatically during installation. For IKS or Minikube, this should be set to <code>false</code>.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  globalConfig:</span>
+<span class="hljs-attr">    openShift:</span> <span class="hljs-literal">true</span>
+</code></pre>
+<h2 id="ie-admin">IE admin</h2>
+<p>Specify user group for IE admin. The following values are default.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  enforcerConfig:</span>
+<span class="hljs-attr">    ieAdminUserGroup:</span> <span class="hljs-string">&quot;system:masters,system:cluster-admins&quot;</span>
+</code></pre>
+<p>Also, you can define IE admin role. This role will be created automatically during installation when <code>autoIEAdminRoleCreationDisabled</code> is <code>false</code> (default).</p>
+<pre><code class="lang-yaml">spec
+  security
+<span class="hljs-attr">    ieAdminSubjects:</span>
+<span class="hljs-attr">      - apiGroup:</span> rbac.authorization.k8s.io
+<span class="hljs-attr">        kind:</span> Group
+<span class="hljs-attr">        name:</span> system:masters
+<span class="hljs-attr">    autoIEAdminRoleCreationDisabled:</span> <span class="hljs-literal">false</span>
+</code></pre>
+<h2 id="webhook-configuration">Webhook configuration</h2>
+<p>You can specify webhook filter configuration for processing requests in IE. As default, all requests for namespaced resources and selected cluster-scope resources are forwarded to IE. If you want to protect a resource by IE, it must be covered with this filter condition.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  webhookNamespacedResource:</span>
+<span class="hljs-attr">    apiGroups:</span> [<span class="hljs-string">&quot;*&quot;</span>]
+<span class="hljs-attr">    apiVersions:</span> [<span class="hljs-string">&quot;*&quot;</span>]
+<span class="hljs-attr">    resources:</span> [<span class="hljs-string">&quot;*&quot;</span>]
+<span class="hljs-attr">  webhookClusterResource:</span>
+<span class="hljs-attr">    apiGroups:</span> [<span class="hljs-string">&quot;*&quot;</span>]
+<span class="hljs-attr">    apiVersions:</span> [<span class="hljs-string">&quot;*&quot;</span>]
+<span class="hljs-attr">    resources:</span>
+<span class="hljs-bullet">    -</span> podsecuritypolicies
+<span class="hljs-bullet">    -</span> clusterrolebindings
+<span class="hljs-bullet">    -</span> clusterroles
+<span class="hljs-bullet">    -</span> clusterresourceprotectionprofiles
+</code></pre>
+<h2 id="logging">Logging</h2>
+<p>Console log includes stdout logging from IE server. Context log includes admission control results. Both are enabled as default. You can specify namespaces in scope. <code>&apos;*&apos;</code> is wildcard. <code>&apos;-&apos;</code> is empty stiring, which implies cluster-scope resource.</p>
+<pre><code class="lang-yaml"><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  enforcerConfig:</span>
+<span class="hljs-attr">    log:</span>
+<span class="hljs-attr">      consoleLog:</span>
+<span class="hljs-attr">        enabled:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">        inScope:</span>
+<span class="hljs-attr">        - namespace:</span> <span class="hljs-string">&apos;*&apos;</span>
+<span class="hljs-attr">        - namespace:</span> <span class="hljs-string">&apos;-&apos;</span>
+<span class="hljs-attr">      contextLog:</span>
+<span class="hljs-attr">        enabled:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">        inScope:</span>
+<span class="hljs-attr">        - namespace:</span> <span class="hljs-string">&apos;*&apos;</span>
+<span class="hljs-attr">        - namespace:</span> <span class="hljs-string">&apos;-&apos;</span>
+<span class="hljs-attr">      logLevel:</span> info
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="README_DEVELOPMENT.html" class="navigation navigation-prev " aria-label="Previous page: Development">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="README_SAMPLE_TEKTON_SIGNING_PIPELINE.html" class="navigation navigation-next " aria-label="Next page: Example: Tekton Signing Pipeline">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Integity Enforcer Custom Resource","level":"1.9","depth":1,"next":{"title":"Example: Tekton Signing Pipeline","level":"1.10","depth":1,"path":"README_SAMPLE_TEKTON_SIGNING_PIPELINE.md","ref":"README_SAMPLE_TEKTON_SIGNING_PIPELINE.md","articles":[]},"previous":{"title":"Development","level":"1.8","depth":1,"path":"README_DEVELOPMENT.md","ref":"README_DEVELOPMENT.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_IE_OPERATOR_CR.md","mtime":"2020-10-01T02:46:40.992Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-10-01T02:47:45.613Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-hide-published-with/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

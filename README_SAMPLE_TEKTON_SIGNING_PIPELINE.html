@@ -1,0 +1,510 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Example: Tekton Signing Pipeline · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="README_IE_OPERATOR_CR.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="README_OVERVIEW.html">
+            
+                <a href="README_OVERVIEW.html">
+            
+                    
+                    Overview
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="README_QUICK.html">
+            
+                <a href="README_QUICK.html">
+            
+                    
+                    Quick Start
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="README_FOR_RESOURCE_PROTECTION_PROFILE.html">
+            
+                <a href="README_FOR_RESOURCE_PROTECTION_PROFILE.html">
+            
+                    
+                    Define Protected Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="README_CONFIG_SIGNER_POLICY.html">
+            
+                <a href="README_CONFIG_SIGNER_POLICY.html">
+            
+                    
+                    Sign Policy
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="README_RESOURCE_SIGNATURE.html">
+            
+                <a href="README_RESOURCE_SIGNATURE.html">
+            
+                    
+                    How to Sign Resources
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="README_DEPLOY_IE_LOCAL.html">
+            
+                <a href="README_DEPLOY_IE_LOCAL.html">
+            
+                    
+                    Deploy IE on Minikube
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="README_DEVELOPMENT.html">
+            
+                <a href="README_DEVELOPMENT.html">
+            
+                    
+                    Development
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.9" data-path="README_IE_OPERATOR_CR.html">
+            
+                <a href="README_IE_OPERATOR_CR.html">
+            
+                    
+                    Integity Enforcer Custom Resource
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.10" data-path="README_SAMPLE_TEKTON_SIGNING_PIPELINE.html">
+            
+                <a href="README_SAMPLE_TEKTON_SIGNING_PIPELINE.html">
+            
+                    
+                    Example: Tekton Signing Pipeline
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Example: Tekton Signing Pipeline</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id="example-tekton-signing-pipeline">Example: Tekton Signing Pipeline</h2>
+<p>This section describe the steps for preparing a Tekton signing pipeline to sign resources of a sample application and deploy them in a cluster protected by Integrity Enforcer (IE).</p>
+<h3 id="prerequisites-for-setting-up-an-example-tekton-signing-pipeline">Prerequisites for setting up an example Tekton signing pipeline</h3>
+<ul>
+<li>Install Tekton CLI in the local environment where the exmple Tekton pipline would be triggered.</li>
+<li><p>Prepare a cluster (RedHat OpenShift cluster including ROKS) for deploying sample application.</p>
+<ul>
+<li>Let us call this a <code>target</code> cluster where a sample application to be deployed via a sample Tekton signing pipeline.</li>
+<li>Setup IE with PGP signature verifcation enbled in a target cluster (see <a href="README_HOW_IE_WORKS.md">documentation</a>).</li>
+<li>Signing task in the example Tekton signing pipeline would require to access the IE secret that includes a pubkey ring for verifying signatures of resources that need to be protected by IE.
+(see <a href="README_RESOURCE_SIGNATURE.html">documentation</a>)</li>
+<li>Make sure signer (e.g. <code>signer@enterprise.com</code>) used in IE secret that includes a pubkey ring for verifying signatures of resources should be used for running Tekton signing pipeline. (see <a href="README_RESOURCE_SIGNATURE.html">documentation</a>)</li>
+<li><p>Prepare namespace in the target cluster where a sample application to be deployed.</p>
+<pre><code>$ oc create namespace sample-app-ns
+</code></pre></li>
+</ul>
+</li>
+<li><p>Prepare a cluster (RedHat OpenShift cluster including ROKS) for deploying and executing the example Tekton signing pipeline.</p>
+<ul>
+<li><p>Install Tekton in a cluser, in which Tekton pipeline would run.</p>
+<p>E.g.: See <a href="https://docs.openshift.com/container-platform/4.5/pipelines/installing-pipelines.html#installing-pipelines" target="_blank">How to install Tekton on OpenShift</a></p>
+</li>
+<li><p>Prepare <code>registry-secret</code> in namespace <code>sample-app-ns</code> to pull the container image for the sample application.</p>
+<p>E.g. A registry secret (registry-secret.yaml) is shown below:</p>
+<pre><code>apiVersion: v1
+kind: Secret
+metadata:
+   name: registry-secret
+type: kubernetes.io/dockerconfigjson
+data:
+   .dockerconfigjson:  eyJhdXRocyI6eyJ1cy5pY3IuaW8iOnsidXNlcm5hbWUiOiJpYW ...
+</code></pre></li>
+</ul>
+</li>
+<li><p>Setup a sample application Git repository using source code for the <a href="../develop/signing-pipeline/sample-app">sample application</a>.</p>
+<p>Executing the example Tekton signing pipeline would require a sample application stored in Git repository so that it could clone the resources.</p>
+<p>The following shows the content of a sample application which includes</p>
+<ul>
+<li>Dockerfile (to build a container image for the sample application)</li>
+<li>Server.py (script to create a simple Python based Http server)</li>
+<li>deployment.yaml (resources for the sameple application that need to be protected)</li>
+<li><p>.ie-sign-config.json (configuration file to specify which resources to be signed by the Tekton signing pipeline)</p>
+<pre><code>$ cd /integrity-enforcer/develop/signing-pipeline/sample-app
+$ tree
+.
+&#x251C;&#x2500;&#x2500; .ie-sign-config.json
+&#x251C;&#x2500;&#x2500; app
+&#x2502;   &#x251C;&#x2500;&#x2500; Dockerfile
+&#x2502;   &#x2514;&#x2500;&#x2500; server.py
+&#x2514;&#x2500;&#x2500; deployment.yml
+</code></pre></li>
+</ul>
+<p>In the Git repository for a sample application, configure <code>.ie-sign-config.json</code> to specify which resources to be signed by the Tekton signing pipeline.</p>
+<p>The following example shows we configured <code>deployment.yml</code> for a sample application to be signed by Tekton signing pipeline.</p>
+<pre><code>$ cat .ie-sign-config.json
+resourcefile:
+- deployment.yml
+</code></pre><p>Tekton signing pipeline would sign specified resources of a sameple application cloned from a repostiory and deploy it to a cluster.</p>
+<p>Deployment of a sample application requires a container image that can be pulled from a container registry.</p>
+<p>The following shows how to prepare a container image for the sameple application and push it to regsitry.
+In the sample application directory, execute <code>docker build</code> and <code>docker push</code> the following commands with required container image name and tag.</p>
+<pre><code>$ cd /integrity-enforcer/develop/signing-pipeline/sample-app
+$ docker build -t docker.io/pipeline-demo/sample-app:rc1 .
+$ docker push docker.io/pipeline-demo/sample-app:rc1
+</code></pre></li>
+</ul>
+<h3 id="setup-a-sample-tekton-signing-pipline">Setup a sample Tekton signing pipline</h3>
+<p>This section describe steps for deploying and running a Tekton pipeline in an OpenShift cluster to sign resources of an application to be deployed in a target cluster.</p>
+<p>The sample Tekton signing pipeline would pull sources of an application from a specified Git repository and sign specified YAML resources in the cloned repository and deploy them to a target cluster protected by <code>integrity-enforcer-ns</code></p>
+<ol>
+<li><p>Create a namespace <code>artifact-signing-ns</code> in a cluster where the pipeline would run. The sample pipeline would be deployed in this namespace.</p>
+<pre><code> $ oc create namespace artifact-signing-ns
+ $ oc project artifact-signing-ns
+</code></pre></li>
+<li><p>Create a Secret resource called <code>registry-secret</code> in namespace <code>artifact-signing-ns</code> to pull container images required to run the pipeline from a container registry</p>
+<p>E.g. A registry secret (registry-secret.yaml) is shown below:</p>
+<pre><code> apiVersion: v1
+ kind: Secret
+ metadata:
+     name: registry-secret
+ type: kubernetes.io/dockerconfigjson
+ data:
+   .dockerconfigjson:  eyJhdXRocyI6eyJ1cy5pY3IuaW8iOnsidXNlcm5hbWUiOiJpYW ...
+</code></pre></li>
+<li><p>Specify a Secret resource called <code>kubeconfig-secret</code> in namespace <code>artifact-signing-ns</code> to access the target cluster where the application should be deployed.</p>
+<p>After coonnecting to the target cluster, get the encoded content of kubeconfig for the target cluster as follows.</p>
+<pre><code>$ oc config view --minify=true | base64
+</code></pre><p>Embed the encoded content of kubeconfig for the target cluster in <code>kubeconfig-secret.yaml</code>.
+E.g. A kubeconfig-secret (kubeconfig-secret.yaml) is shown below:</p>
+<pre><code> apiVersion: v1
+ kind: Secret
+ metadata:
+    name: kubeconfig-secret
+ type: Opaque
+ data:
+   kubeconfig: YXBpVmVyc2lvbjogdjEKY2x1c3RlcnM6
+</code></pre></li>
+<li><p>Specify a Secret resource called <code>git-credentials</code> in namespace <code>artifact-signing-ns</code> to access the target Git repository where the application is hosted.</p>
+<p>Setup a <code>personal accesss token</code> to access the target Git repository where the sample application is hosted.</p>
+<p>E.g.: A git-credentials (git-credentials.yaml) belows shows that encoded <code>personal accesss token</code> as <code>password</code> and encoded usename as <code>username</code>.</p>
+<pre><code> apiVersion: v1
+ kind: Secret
+ metadata:
+    name: git-credentials
+ type: Opaque
+ data:
+    username: Z2FqYW5....
+    password: OTA1NmYwZTY...
+</code></pre></li>
+<li><p>Setup the sameple Tekton signing pipline in a cluster</p>
+<p>Deploy the sameple Tekton signing pipline resources in the cluster as follows.</p>
+<pre><code>   $ cd example/signing-pipeline/tekton-pipeline
+   $ oc create -f admin-role.yaml -n artifact-signing-ns
+   $ oc create -f registry-secret.yaml -n artifact-signing-ns
+   $ oc create -f git-credentials.yaml -n artifact-signing-ns
+   $ oc create -f kubeconfig-secret.yaml -n artifact-signing-ns
+   $ oc create -f pipeline.yaml -n artifact-signing-ns
+   $ oc create -f task-clone-repo.yaml -n artifact-signing-ns
+   $ oc create -f task-sign-repo.yaml -n artifact-signing-ns
+   $ oc create -f openshift-pvc.yaml -n artifact-signing-ns
+</code></pre></li>
+<li><p>Run the example Tekton signing pipline as follows:</p>
+<p>In the cluster, using Tekton CLI, run the pipeline by passing the required parameters as follows.</p>
+<pre><code>   $ tkn pipeline start pipeline-ie \
+     -p pipeline-pvc=&quot;pipeline-pvc&quot; \
+     -p git-url=&quot;https://github.com/sample-demo/sample-app.git&quot; \
+     -p git-branch=&quot;master&quot; \
+     -p git-username=&quot;sample-user&quot; \
+     -p git-token=&quot;9056f0e68d89888de9fffb...........&quot; \
+     -p signer-email=&quot;signer@enterprise.com&quot;\
+     -p deploy-namespace=&quot;sample-app-ns&quot; \
+     -s ie-signing-pipline-admin
+</code></pre><p>We pass the following parameters:</p>
+<ul>
+<li><code>pipeline-pvc</code>:   A <code>Persistent Volume Claim</code> for executing the pipeline task, defined in a <a href="../example/signing-pipeline/tekton-pipeline/openshift-pvc.yaml">resource</a></li>
+<li><code>git-url</code>:  A sample application Github repository URL</li>
+<li><code>git-branch</code>: A sample application Github repository branch</li>
+<li><code>git-username</code>: Username to access the sample application Github repository</li>
+<li><code>git-token</code>: Personal access token to access the sample application Github repository</li>
+<li><code>signer-email</code>: A specifid <code>signer</code> which is already setup in IE (see <a href="README_RESOURCE_SIGNATURE.html">documentation</a></li>
+<li><code>deploy-namespace</code>: The namespace in the target cluster where the target application would be deployed</li>
+<li><code>ie-signing-pipline-admin</code>: Service account name setup in resource (../example/signing-pipeline/tekton-pipeline/admin-role.yaml)</li>
+</ul>
+<p>Check the list of pipelineruns</p>
+<pre><code>   $ tkn pipelinerun list
+    NAME                    STARTED          DURATION     STATUS
+    pipeline-ie-run-jllw7   9 minutes ago    24 seconds   Succeeded
+</code></pre><p>Check the logs of pipelinerun to see if it successfully completed</p>
+<pre><code>   $ tkn pipelinerun logs pipeline-ie-run-jllw7 -f -n artifact-signing-ns
+</code></pre><p>Successful completion of Tekton signing pipeline run would deploy the signed resources of the sample application to the target cluster.</p>
+<p>In the target cluster, check if resource signature is successfully deployed.</p>
+<pre><code>   $ oc get resourcesignature.research.ibm.com rsig-ie-sample-app -n integrity-enforcer-ns
+   NAME                 AGE
+   rsig-ie-sample-app   29s
+</code></pre><p>In the target cluster, check if the sample application is successfully deployed.</p>
+<pre><code>   $ oc get all -n sample-app-ns
+   NAME                                READY   STATUS    RESTARTS   AGE
+   pod/ie-sample-app-7c55bcf4d-kjtc4   1/1     Running   0          9s
+   pod/ie-sample-app-7c55bcf4d-l57hq   1/1     Running   0          9s
+
+   NAME                        TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+   service/ie-sample-service   NodePort   172.30.73.12   &lt;none&gt;        80:31619/TCP   9s
+
+   NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+   deployment.apps/ie-sample-app   2/2     2            2           9s
+
+   NAME                                      DESIRED   CURRENT   READY   AGE
+   replicaset.apps/ie-sample-app-7c55bcf4d   2         2         2       10s
+</code></pre></li>
+</ol>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="README_IE_OPERATOR_CR.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Integity Enforcer Custom Resource">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Example: Tekton Signing Pipeline","level":"1.10","depth":1,"previous":{"title":"Integity Enforcer Custom Resource","level":"1.9","depth":1,"path":"README_IE_OPERATOR_CR.md","ref":"README_IE_OPERATOR_CR.md","articles":[]},"dir":"ltr"},"config":{"plugins":["-sharing","hide-published-with"],"root":".","styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"hide-published-with":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"readme.md","glossary":"GLOSSARY.md","summary":"summary.md"},"variables":{},"gitbook":"*"},"file":{"path":"README_SAMPLE_TEKTON_SIGNING_PIPELINE.md","mtime":"2020-10-01T02:46:40.992Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-10-01T02:47:45.613Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-hide-published-with/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
