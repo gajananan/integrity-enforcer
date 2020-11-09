@@ -8,7 +8,9 @@ go:
 
 before_install:
   - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
-
+  - export TRAVIS_BUILD_DIR=/home/travis/gopath/src/github.com/gajananan/integrity-enforcer/travis_build
+  - ${TRAVIS_BUILD_DIR}/build/install-dependencies.sh
+  
 script:
   - pwd
   - cd ./develop/scripts
