@@ -27,17 +27,17 @@ LOGG_BASEDIR ?=$(REPO_ROOT)/logging/
 LOGG_IMAGE_REMOTE ?=integrityenforcer/ie-logging:0.0.3
 LOGG_IMAGE_LOCAL ?=ie-logging:local
 
-SS_BASEDIR ?=$(REPO_ROOT)/signservice/
-SS_IMAGE_REMOTE ?=integrityenforcer/ie-signservice:0.0.3
-SS_IMAGE_LOCAL ?=signservice:dev
+#SS_BASEDIR ?=$(REPO_ROOT)/signservice/
+#SS_IMAGE_REMOTE ?=integrityenforcer/ie-signservice:0.0.3
+#SS_IMAGE_LOCAL ?=signservice:dev
 
 CA ?=$(shell openssl base64 -A <'$(KEYDIR)/ca.crt')
 
 image/ie-server: $(shell find . -name '*.go')
 		CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o $@ ./cmd/$(SERVICE_NAME)
 
-image/signservice: $(shell find $(SS_BASEDIR) -name '*.go')
-		CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o $(SS_BASEDIR)/build/_output/signservice $(SS_BASEDIR)/cmd/signservice
+#image/signservice: $(shell find $(SS_BASEDIR) -name '*.go')
+#		CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o $(SS_BASEDIR)/build/_output/signservice $(SS_BASEDIR)/cmd/signservice
 
 util-build: $(shell find . -name '*.go')
 		CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o $@ ./cmd/sig-util
