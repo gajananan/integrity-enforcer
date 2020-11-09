@@ -12,4 +12,5 @@ before_install:
 script:
   - pwd
   - cd ./enforcer
-  - make lint test
+  - export IE_ENV=remote
+  - make build
