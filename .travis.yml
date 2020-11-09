@@ -1,5 +1,8 @@
 language: go
 
+go_import_path: github.com/gajananan/integrity-enforcer/enforcer
+
+
 go:
   - 1.14.x
 
