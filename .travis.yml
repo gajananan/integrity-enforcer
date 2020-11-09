@@ -1,10 +1,7 @@
 language: go
-go_import_path: github.com/IBM/integrity-enforcer/enforcer
+go_import_path: github.com/gajananan/integrity-enforcer/enforcer
 go:
   - 1.14.x
 
-env:
-- GO111MODULE=auto
-
 script:
-- go test -v github.com/IBM/integrity-enforcer/enforcer/pkg/util/sign/x509
+- go test -v github.com/gajananan/integrity-enforcer/enforcer/pkg/util/sign/x509
