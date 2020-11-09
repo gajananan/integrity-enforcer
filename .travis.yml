@@ -7,4 +7,4 @@ env:
 - GO111MODULE=auto
 
 script:
-- go test -v github.com/gajananan/integrity-enforcer/enforcer/pkg/util/sign/x509
+- go test -v github.com/IBM/integrity-enforcer/enforcer/pkg/util/sign/x509
