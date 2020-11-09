@@ -7,4 +7,4 @@ env:
 - GO111MODULE=on
 
 script:
-- ./develop/scripts/build_images.sh 
+- go test -v github.com/IBM/integrity-enforcer/enforcer/pkg/util.sign/x509
