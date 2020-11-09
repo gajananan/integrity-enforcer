@@ -1,26 +1,14 @@
 language: go
 
+service:
+  - docker
+
 go:
-   - 1.15.x
+  - 1.x
 
-env:
- global:
-  - GO111MODULE=auto
-  - GOFLAGS="-mod=readonly"
+before_install:
+  - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
 
-cache:
- directories:
-  - $HOME/.cache/go-build
-  - $HOME/gopath/pkg/mod
-  
-git:
- depth: 1
- autocrlf: input  
- 
- before_install:
- - ${TRAVIS_BUILD_DIR}/.travis/run-parts ${TRAVIS_BUILD_DIR}/.travis/deps.d/${TRAVIS_OS_NAME}
- 
- go_import_path: github.com/gajananan/integrity-enforcer/enforcer
- 
- script:
- - go test -v github.com/gajananan/integrity-enforcer/enforcer/pkg/util/sign/x509
+script:
+  - cd ./enforce
+  - make lint test
