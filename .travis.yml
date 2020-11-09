@@ -1,17 +1,14 @@
 language: go
 
-go_import_path: github.com/gajananan/integrity-enforcer/enforcer
-
+service:
+  - docker
 
 go:
-  - 1.14.x
+  - 1.x
 
-env:
-- "PATH=/home/travis/gopath/bin:$PATH"
+before_install:
+  - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
 
 script:
-- go test -v github.com/gajananan/integrity-enforcer/enforcer/pkg/util/sign/x509
+  - make lint test
 
-
-after_success:
-  - gox -output "dist/{{.OS}}_{{.Arch}}_{{.Dir}}"
