@@ -11,7 +11,7 @@ before_install:
   
 script:
   - export TRAVIS_BUILD_DIR=/home/travis/gopath/src/github.com/gajananan/integrity-enforcer/travis_build
-  - ${TRAVIS_BUILD_DIR}/build/install-dependencies.sh
+  - ${TRAVIS_BUILD_DIR}/install-dependencies.sh
   - pwd
   - cd ./develop/scripts
   - pwd
