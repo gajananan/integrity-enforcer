@@ -12,6 +12,8 @@ before_install:
 script:
   - pwd
   - cd ./develop/scripts
+  - pwd
+  - ls
   - export IE_REPO_ROOT=/home/travis/gopath/src/github.com/gajananan/integrity-enforcer
   - export IE_ENV=remote
-  - build_images.sh
+  - ./build_images.sh
