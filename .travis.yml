@@ -1,4 +1,10 @@
 language: go
-go_import_path: github.com/jetstack/cert-manager
+go_import_path: github.com/IBM/integrity-enforcer/enforcer
 go:
-  - 1.13.x
+  - 1.14.x
+
+env:
+- GO111MODULE=on
+
+script:
+- ./develop/scripts/build_images.sh 
