@@ -11,5 +11,5 @@ before_install:
 
 script:
   - pwd
-  - cd ./enforce
+  - cd ./enforcer
   - make lint test
