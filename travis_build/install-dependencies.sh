@@ -12,9 +12,9 @@ operator-sdk version
 
 OPM_VERSION=v1.13.8
 
-if [[ "$OS_NAME" == "Linux" ]]
+if [[ "$OS_NAME" == "Linux" ]]; then
     OPM_URL=https://github.com/operator-framework/operator-registry/releases/download/$(OPM_VERSION)/linux-amd64-opm
-elif [[ "$OS_NAME" == "Darwin" ]]
+elif [[ "$OS_NAME" == "Darwin" ]]; then
     OPM_URL=https://github.com/operator-framework/operator-registry/releases/download/$(OPM_VERSION)/darwin-amd64-opm
 if
 
