@@ -28,7 +28,7 @@ if [[ "$OS_NAME" == "Linux" ]]; then
     curl -s "https://raw.githubusercontent.com/\\nkubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
 fi
 
-chmod+x ./kustomize
+chmod +x ./kustomize
 mv ./kustomize $GOPATH/bin/kustomize
 
 echo "Finished setting up."
