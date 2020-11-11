@@ -14,9 +14,9 @@ script:
   - echo $GOPATH
   - ${TRAVIS_BUILD_DIR}/install-dependencies.sh
   - pwd
-  - cd ./develop/scripts
   - pwd
   - ls
   - export IE_REPO_ROOT=/home/travis/gopath/src/github.com/gajananan/integrity-enforcer
   - export IE_ENV=remote
-  - ./build_images.sh
+  #- ./develop/scripts/build_images.sh
+  - ./scripts/make_bundle.sh
