@@ -1,3 +1,5 @@
+#!/bin/bash
+
 OS_NAME=$(shell uname -s)
 
 OPERATOR_SDK_VERSION=v1.1.0
@@ -10,11 +12,11 @@ operator-sdk version
 
 OPM_VERSION=v1.13.8
 
-ifeq ($(OS_NAME), Linux)
+if [[ "$OS_NAME" == "Linux" ]]
     OPM_URL=https://github.com/operator-framework/operator-registry/releases/download/$(OPM_VERSION)/linux-amd64-opm
-else ifeq ($(OS_NAME), Darwin)
+elif [[ "$OS_NAME" == "Darwin")
     OPM_URL=https://github.com/operator-framework/operator-registry/releases/download/$(OPM_VERSION)/darwin-amd64-opm
-endif
+if
 
 
 wget -nv $(OPM_URL) -O $(GOPATH)/bin/opm || (echo "wget returned $$? trying to fetch opm. please install opm and try again"; exit 1)
