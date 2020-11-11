@@ -17,11 +17,18 @@ elif [[ "$OS_NAME" == "Darwin" ]]; then
     OPM_URL=https://github.com/operator-framework/operator-registry/releases/download/$OPM_VERSION/darwin-amd64-opm
 fi
 
-
 echo $GOPATH
 wget -nv $OPM_URL -O $GOPATH/bin/opm
 chmod +x $GOPATH/bin/opm
 
 $GOPATH/bin/opm version
+
+
+if [[ "$OS_NAME" == "Linux" ]]; then
+    curl -s "https://raw.githubusercontent.com/\\nkubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+fi
+
+chmod+x ./kustomize
+mv ./kustomize $GOPATH/bin/kustomize
 
 echo "Finished setting up."
