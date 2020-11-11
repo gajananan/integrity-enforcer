@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OS_NAME=$(shell uname -s)
+OS_NAME=$(uname -s)
 
 OPERATOR_SDK_VERSION=v1.1.0
 
