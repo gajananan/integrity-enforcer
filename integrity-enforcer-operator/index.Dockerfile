@@ -7,8 +7,8 @@ ARG USER_ID=1001
 ARG GROUP_ID=12009
 
 
-RUN groupadd -g ${GROUP_ID} myuser \
- && useradd -g myuser -u ${USER_ID} -m myuser \
+RUN groupadd -g ${GROUP_ID} myuser &&\
+    useradd -g myuser -u ${USER_ID} -m myuser &&\
     usermod -aG wheel myuser
 
 #ENV USER opmuser
