@@ -58,7 +58,7 @@ type RequestHandler struct {
 
 func NewRequestHandler(config *config.EnforcerConfig) *RequestHandler {
 	cc := InitCheckContext(config)
-	return &RequestHandler{config: config, loader: &loader.Loader{Config: config}, ctx: cc}
+	return &RequestHandler{config: config, loader: &loader.Loader{}, ctx: cc}
 }
 
 func (self *RequestHandler) Run(req *v1beta1.AdmissionRequest) *v1beta1.AdmissionResponse {
@@ -80,18 +80,6 @@ func (self *RequestHandler) Run(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 	//init loader
 	self.loader = loader.NewLoader(self.config, self.reqc)
 
-	if self.config.Log.IncludeRequest {
-		self.ctx.IncludeRequest = true
-	}
-
-	if self.config.Log.ConsoleLog.IsInScope(reqc) {
-		self.ctx.ConsoleLogEnabled = true
-	}
-
-	if self.config.Log.ContextLog.IsInScope(reqc) {
-		self.ctx.ContextLogEnabled = true
-	}
-
 	//init logger
 	logger.InitSessionLogger(reqc.Namespace,
 		reqc.Name,
@@ -110,7 +98,7 @@ func (self *RequestHandler) Run(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 		}
 
 		self.ctx.IEResource = true
-		if self.checkIfIEAdminRequest() || self.checkIfIEServerRequest() {
+		if self.checkIfIEAdminRequest() || self.checkIfIEServerRequest() || self.checkIfIEOperatorRequest() {
 			allowed = true
 			evalReason = common.REASON_IE_ADMIN
 		} else {
@@ -150,7 +138,7 @@ func (self *RequestHandler) Run(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 
 	var errMsg string
 	var denyingProfile profile.SigningProfile
-	if !self.ctx.Aborted && self.ctx.Protected && !allowed {
+	if !self.ctx.Aborted && !self.ctx.IEResource && self.ctx.Protected && !allowed {
 
 		signingProfiles := self.loader.SigningProfile(profileReferences)
 		allowCount := 0
@@ -205,8 +193,8 @@ func (self *RequestHandler) Run(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 				allowed = false
 				evalReason = evalReasonForThisProfile
 				errMsg = errMsgForThisProfile
-				self.ctx.Result.SignatureEvalResult = signResultForThisProfile
-				self.ctx.Result.MutationEvalResult = mutationResultForThisProfile
+				self.ctx.SignatureEvalResult = signResultForThisProfile
+				self.ctx.MutationEvalResult = mutationResultForThisProfile
 				break
 			} else {
 				allowCount += 1
@@ -215,8 +203,8 @@ func (self *RequestHandler) Run(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 				allowed = true
 				evalReason = evalReasonForThisProfile
 				errMsg = errMsgForThisProfile
-				self.ctx.Result.SignatureEvalResult = signResultForThisProfile
-				self.ctx.Result.MutationEvalResult = mutationResultForThisProfile
+				self.ctx.SignatureEvalResult = signResultForThisProfile
+				self.ctx.MutationEvalResult = mutationResultForThisProfile
 			}
 		}
 
@@ -236,8 +224,6 @@ func (self *RequestHandler) Run(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 	self.ctx.Verified = dr.Verified
 	self.ctx.ReasonCode = dr.ReasonCode
 	self.ctx.Message = dr.Message
-	self.ctx.AllowByDetectOnlyMode = dr.AllowByDetectOnlyMode
-	self.ctx.AllowByBreakGlassMode = dr.AllowByBreakGlassMode
 
 	//create admission response
 	admissionResponse := createAdmissionResponse(self.ctx.Allow, self.ctx.Message)
@@ -252,8 +238,11 @@ func (self *RequestHandler) Run(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 		}()
 	}
 
-	if self.ctx.Allow && self.ctx.IEResource && self.checkIfProfileResource() {
-		self.loader.UpdateRuleTable(self.reqc)
+	if self.ctx.Allow && self.checkIfProfileResource() {
+		err := self.loader.UpdateRuleTable(self.reqc)
+		if err != nil {
+			logger.Error("Failed to update RuleTable; ", err)
+		}
 	}
 
 	if !self.ctx.Allow && !self.ctx.IEResource && denyingProfile != nil {
@@ -279,12 +268,10 @@ func (self *RequestHandler) Run(req *v1beta1.AdmissionRequest) *v1beta1.Admissio
 }
 
 type DecisionResult struct {
-	Allow                 bool
-	Verified              bool
-	ReasonCode            int
-	Message               string
-	AllowByDetectOnlyMode bool
-	AllowByBreakGlassMode bool
+	Allow      bool
+	Verified   bool
+	ReasonCode int
+	Message    string
 }
 
 func (self *RequestHandler) evalFinalDecision(allowed bool, evalReason int, errMsg string) *DecisionResult {
@@ -316,13 +303,11 @@ func (self *RequestHandler) evalFinalDecision(allowed bool, evalReason int, errM
 	if !dr.Allow && self.ctx.DetectOnlyModeEnabled {
 		dr.Allow = true
 		dr.Verified = false
-		dr.AllowByDetectOnlyMode = true
 		dr.Message = common.ReasonCodeMap[common.REASON_DETECTION].Message
 		dr.ReasonCode = common.REASON_DETECTION
 	} else if !dr.Allow && self.ctx.BreakGlassModeEnabled {
 		dr.Allow = true
 		dr.Verified = false
-		dr.AllowByBreakGlassMode = true
 		dr.Message = common.ReasonCodeMap[common.REASON_BREAK_GLASS].Message
 		dr.ReasonCode = common.REASON_BREAK_GLASS
 	}
@@ -343,11 +328,11 @@ func (self *RequestHandler) evalFinalDecisionForIEResource(allowed bool, evalRea
 		dr.Verified = false
 		dr.Message = self.ctx.AbortReason
 		dr.ReasonCode = common.REASON_ABORTED
-	} else if self.reqc.IsDeleteRequest() && self.reqc.Kind != "ResourceSignature" && !self.checkIfIEAdminRequest() && !self.checkIfIEServerRequest() {
+	} else if !self.checkIfIEAdminRequest() && !self.checkIfIEServerRequest() && !self.checkIfIEOperatorRequest() {
 		dr.Allow = false
 		dr.Verified = true
-		dr.ReasonCode = common.REASON_BLOCK_DELETE
-		dr.Message = common.ReasonCodeMap[common.REASON_BLOCK_DELETE].Message
+		dr.ReasonCode = common.REASON_BLOCK_IE_RESOURCE_OPERATION
+		dr.Message = common.ReasonCodeMap[common.REASON_BLOCK_IE_RESOURCE_OPERATION].Message
 	} else if allowed {
 		dr.Allow = true
 		dr.Verified = true
@@ -363,7 +348,6 @@ func (self *RequestHandler) evalFinalDecisionForIEResource(allowed bool, evalRea
 	if !dr.Allow && self.ctx.DetectOnlyModeEnabled {
 		dr.Allow = true
 		dr.Verified = false
-		dr.AllowByDetectOnlyMode = true
 		dr.Message = common.ReasonCodeMap[common.REASON_DETECTION].Message
 		dr.ReasonCode = common.REASON_DETECTION
 	}
@@ -414,22 +398,32 @@ func createAdmissionResponse(allowed bool, msg string) *v1beta1.AdmissionRespons
 }
 
 func (self *RequestHandler) logEntry() {
-	if self.ctx.ConsoleLogEnabled {
+	if self.CheckIfConsoleLogEnabled() {
 		sLogger := logger.GetSessionLogger()
 		sLogger.Trace("New Admission Request Received")
 	}
 }
 
 func (self *RequestHandler) logContext() {
-	if self.ctx.ContextLogEnabled {
+	if self.CheckIfContextLogEnabled() {
 		cLogger := logger.GetContextLogger()
-		logBytes := self.ctx.convertToLogBytes(self.reqc)
-		cLogger.SendLog(logBytes)
+		logRecord := self.ctx.convertToLogRecord(self.reqc)
+		if self.config.Log.IncludeRequest && !self.reqc.IsSecret() {
+			logRecord["request.dump"] = self.reqc.RequestJsonStr
+		}
+		logBytes, err := json.Marshal(logRecord)
+		if err != nil {
+			logger.Error(err)
+			logBytes = []byte("")
+		}
+		if self.reqc.ResourceScope == "Namespaced" || (self.reqc.ResourceScope == "Cluster" && self.ctx.Protected) {
+			cLogger.SendLog(logBytes)
+		}
 	}
 }
 
 func (self *RequestHandler) logExit() {
-	if self.ctx.ConsoleLogEnabled {
+	if self.CheckIfConsoleLogEnabled() {
 		sLogger := logger.GetSessionLogger()
 		sLogger.WithFields(log.Fields{
 			"allowed": self.ctx.Allow,
@@ -448,7 +442,7 @@ func (self *RequestHandler) createPatch() []byte {
 		if !self.ctx.Verified {
 			labels[common.ResourceIntegrityLabelKey] = common.LabelValueUnverified
 			labels[common.ReasonLabelKey] = common.ReasonCodeMap[self.ctx.ReasonCode].Code
-		} else if self.ctx.Result.SignatureEvalResult.Allow {
+		} else if self.ctx.SignatureEvalResult.Allow {
 			labels[common.ResourceIntegrityLabelKey] = common.LabelValueVerified
 			labels[common.ReasonLabelKey] = common.ReasonCodeMap[self.ctx.ReasonCode].Code
 		} else {
@@ -465,7 +459,7 @@ func (self *RequestHandler) createPatch() []byte {
 }
 
 func (self *RequestHandler) evalSignature(signingProfile profile.SigningProfile) (*common.SignatureEvalResult, error) {
-	signPolicy := self.loader.MergedSignPolicy()
+	signPolicy := self.loader.GetSignPolicy()
 	plugins := self.GetEnabledPlugins()
 	if evaluator, err := sign.NewSignatureEvaluator(self.config, signPolicy, plugins); err != nil {
 		return nil, err
@@ -478,13 +472,8 @@ func (self *RequestHandler) evalSignature(signingProfile profile.SigningProfile)
 
 func (self *RequestHandler) evalMutation(signingProfile profile.SigningProfile) (*common.MutationEvalResult, error) {
 	reqc := self.reqc
-	owners := []*common.Owner{}
-	//ignoreAttrs := self.GetIgnoreAttrs()
-	if checker, err := handlerutil.NewMutationChecker(owners); err != nil {
-		return nil, err
-	} else {
-		return checker.Eval(reqc, signingProfile)
-	}
+	checker := handlerutil.NewMutationChecker()
+	return checker.Eval(reqc, signingProfile)
 }
 
 func (self *RequestHandler) abort(reason string, err error) {
@@ -499,7 +488,7 @@ func (self *RequestHandler) checkIfDryRunAdmission() bool {
 
 func (self *RequestHandler) checkIfUnprocessedInIE() bool {
 	reqc := self.reqc
-	for _, d := range self.loader.UnprotectedRequestMatchPattern() {
+	for _, d := range self.config.Ignore {
 		if d.Match(reqc.Map()) {
 			return true
 		}
@@ -508,11 +497,9 @@ func (self *RequestHandler) checkIfUnprocessedInIE() bool {
 }
 
 func (self *RequestHandler) checkIfIEResource() bool {
-	isIECustomResource := (self.reqc.ApiGroup == self.config.IEResource) //"apis.integrityenforcer.io"
-	isIELockConfigMap := (self.reqc.Kind == "ConfigMap" &&
-		self.reqc.Namespace == self.config.Namespace &&
-		(self.reqc.Name == loader.DefaultRuleTableLockCMName || self.reqc.Name == loader.DefaultIgnoreTableLockCMName || self.reqc.Name == loader.DefaultForceCheckTableLockCMName))
-	return isIECustomResource || isIELockConfigMap
+	ieResCondition := self.config.IEResourceCondition
+	isIEResouce := ieResCondition.Match(self.reqc)
+	return isIEResouce
 }
 
 func (self *RequestHandler) checkIfProfileResource() bool {
@@ -527,6 +514,10 @@ func (self *RequestHandler) checkIfIEServerRequest() bool {
 	return common.MatchPattern(self.config.IEServerUserName, self.reqc.UserName) //"service account for integrity-enforcer"
 }
 
+func (self *RequestHandler) checkIfIEOperatorRequest() bool {
+	return common.ExactMatch(self.config.IEResourceCondition.OperatorServiceAccount, self.reqc.UserName) //"service account for integrity-enforcer-operator"
+}
+
 func (self *RequestHandler) GetEnabledPlugins() map[string]bool {
 	return self.config.GetEnabledPlugins()
 }
@@ -534,21 +525,21 @@ func (self *RequestHandler) GetEnabledPlugins() map[string]bool {
 func (self *RequestHandler) checkIfProtected() (bool, []*v1.ObjectReference) {
 	reqFields := self.reqc.Map()
 	table := self.loader.ProtectRules()
-	protected, matchedProfileRefs := table.Match(reqFields)
+	protected, matchedProfileRefs := table.Match(reqFields, self.config.Namespace)
 	return protected, matchedProfileRefs
 }
 
 func (self *RequestHandler) checkIfIgnored() (bool, []*v1.ObjectReference) {
 	reqFields := self.reqc.Map()
 	table := self.loader.IgnoreRules()
-	matched, matchedProfileRefs := table.Match(reqFields)
+	matched, matchedProfileRefs := table.Match(reqFields, self.config.Namespace)
 	return matched, matchedProfileRefs
 }
 
 func (self *RequestHandler) checkIfForced() (bool, []*v1.ObjectReference) {
 	reqFields := self.reqc.Map()
 	table := self.loader.ForceCheckRules()
-	matched, matchedProfileRefs := table.Match(reqFields)
+	matched, matchedProfileRefs := table.Match(reqFields, self.config.Namespace)
 	return matched, matchedProfileRefs
 }
 
@@ -583,7 +574,15 @@ func (self *RequestHandler) CheckIfBreakGlassEnabled() bool {
 }
 
 func (self *RequestHandler) CheckIfDetectOnly() bool {
-	return self.loader.DetectOnlyMode()
+	return (self.config.Mode == config.DetectMode)
+}
+
+func (self *RequestHandler) CheckIfConsoleLogEnabled() bool {
+	return self.config.Log.ConsoleLog.IsInScope(self.reqc)
+}
+
+func (self *RequestHandler) CheckIfContextLogEnabled() bool {
+	return self.config.Log.ContextLog.IsInScope(self.reqc)
 }
 
 func (self *RequestHandler) createOrUpdateEvent() error {

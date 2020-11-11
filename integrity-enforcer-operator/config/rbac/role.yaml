@@ -24,6 +24,7 @@ rules:
   - enforcerconfigs
   - helmreleasemetadatas
   - integrityenforcers
+  - integrityenforcers/finalizers
   - resourcesignatures
   - resourcesigningprofiles
   - signpolicies
@@ -80,6 +81,16 @@ rules:
   verbs:
   - create
   - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
   - get
   - list
   - patch

@@ -52,17 +52,16 @@ type VerifierInterface interface {
 ***********************************************/
 
 type ResourceVerifier struct {
-	VerifyType   VerifyType
-	Namespace    string
-	CertPoolPath string
-	KeyringPath  string
+	VerifyType  VerifyType
+	Namespace   string
+	KeyPathList []string
 }
 
-func NewVerifier(verifyType VerifyType, signType SignatureType, enforcerNamespace, certPoolPath, keyringPath string) VerifierInterface {
+func NewVerifier(verifyType VerifyType, signType SignatureType, enforcerNamespace string, keyPathList []string) VerifierInterface {
 	if signType == SignatureTypeResource || signType == SignatureTypeApplyingResource || signType == SignatureTypePatch {
-		return &ResourceVerifier{Namespace: enforcerNamespace, VerifyType: verifyType, CertPoolPath: certPoolPath, KeyringPath: keyringPath}
+		return &ResourceVerifier{Namespace: enforcerNamespace, VerifyType: verifyType, KeyPathList: keyPathList}
 	} else if signType == SignatureTypeHelm {
-		return &HelmVerifier{Namespace: enforcerNamespace, VerifyType: verifyType, CertPoolPath: certPoolPath, KeyringPath: keyringPath}
+		return &HelmVerifier{Namespace: enforcerNamespace, VerifyType: verifyType, KeyPathList: keyPathList}
 	}
 	return nil
 }
@@ -136,7 +135,7 @@ func (self *ResourceVerifier) Verify(sig *GeneralSignature, reqc *common.ReqCont
 	if self.VerifyType == VerifyTypePGP {
 		message := sig.data["message"]
 		signature := sig.data["signature"]
-		ok, reasonFail, signer, err := pgp.VerifySignature(self.KeyringPath, message, signature)
+		ok, reasonFail, signer, err := pgp.VerifySignature(self.KeyPathList, message, signature)
 		if err != nil {
 			vcerr = &common.CheckError{
 				Msg:    "Error occured in signature verification",
@@ -165,7 +164,7 @@ func (self *ResourceVerifier) Verify(sig *GeneralSignature, reqc *common.ReqCont
 
 	} else if self.VerifyType == VerifyTypeX509 {
 		certificate := []byte(sig.data["certificate"])
-		certOk, reasonFail, err := x509.VerifyCertificate(certificate, self.CertPoolPath)
+		certOk, reasonFail, err := x509.VerifyCertificate(certificate, self.KeyPathList)
 		if err != nil {
 			vcerr = &common.CheckError{
 				Msg:    "Error occured in certificate verification",
@@ -204,7 +203,7 @@ func (self *ResourceVerifier) Verify(sig *GeneralSignature, reqc *common.ReqCont
 				retErr = err
 			} else if sigOk {
 				vcerr = nil
-				vsinfo = common.NewSignerInfoFromCert(cert)
+				vsinfo = x509.NewSignerInfoFromCert(cert)
 				retErr = nil
 			} else {
 				vcerr = &common.CheckError{
@@ -359,7 +358,7 @@ func getMaskDef(kind string) []string {
 		logger.Error(err)
 		return []string{}
 	}
-	maskDef["*"] = common.CommonMessageMask
+	maskDef["*"] = CommonMessageMask
 
 	masks := []string{}
 	masks = append(masks, maskDef["*"]...)
@@ -384,10 +383,17 @@ func matchContents(orgObj, reqObj []byte, focus, mask []string, allowDiffPattern
 	}
 
 	matched := false
-	maskedOrgNode := orgNode.Mask(mask)
-	maskedReqNode := reqNode.Mask(mask)
+	orgNodeToCompare := orgNode.Copy()
+	reqNodeToCompare := reqNode.Copy()
+	if len(focus) > 0 {
+		orgNodeToCompare = orgNode.Extract(focus)
+		reqNodeToCompare = reqNode.Extract(focus)
+	} else {
+		orgNodeToCompare = orgNode.Mask(mask)
+		reqNodeToCompare = reqNode.Mask(mask)
+	}
 
-	dr := maskedOrgNode.Diff(maskedReqNode)
+	dr := orgNodeToCompare.Diff(reqNodeToCompare)
 	if dr != nil && len(allowDiffPatterns) > 0 {
 		dr = dr.Remove(allowDiffPatterns)
 	}
@@ -395,12 +401,6 @@ func matchContents(orgObj, reqObj []byte, focus, mask []string, allowDiffPattern
 
 	if dr == nil {
 		matched = true
-	} else {
-		if len(focus) > 0 {
-			if !focusKeyExistInDiffResult(focus, dr) {
-				matched = true
-			}
-		}
 	}
 
 	if !matched && dr != nil {
@@ -436,17 +436,6 @@ func GenerateMessageFromRawObj(rawObj []byte, filter, mutableAttrs string) strin
 		}
 	}
 	return message
-}
-
-func focusKeyExistInDiffResult(focus []string, dr *mapnode.DiffResult) bool {
-	for _, diffFullKey := range dr.Keys() {
-		for _, focusKey := range focus {
-			if strings.HasPrefix(diffFullKey, focusKey) {
-				return true
-			}
-		}
-	}
-	return false
 }
 
 func base64decode(str string) string {
@@ -509,10 +498,9 @@ type SigVerifyResult struct {
 ***********************************************/
 
 type HelmVerifier struct {
-	VerifyType   VerifyType
-	Namespace    string
-	CertPoolPath string
-	KeyringPath  string
+	VerifyType  VerifyType
+	Namespace   string
+	KeyPathList []string
 }
 
 func (self *HelmVerifier) Verify(sig *GeneralSignature, reqc *common.ReqContext, signingProfile profile.SigningProfile) (*SigVerifyResult, error) {
@@ -555,7 +543,7 @@ func (self *HelmVerifier) Verify(sig *GeneralSignature, reqc *common.ReqContext,
 
 			helmChart := hrmObj.Spec.Chart
 			helmProv := hrmObj.Spec.Prov
-			ok, signer, reasonFail, err := helm.VerifyChartAndProv(helmChart, helmProv, self.KeyringPath)
+			ok, signer, reasonFail, err := helm.VerifyChartAndProv(helmChart, helmProv, self.KeyPathList)
 			if err != nil {
 				vcerr = &common.CheckError{
 					Msg:    "Error occured in helm chart verification",
@@ -599,4 +587,23 @@ func (self *HelmVerifier) Verify(sig *GeneralSignature, reqc *common.ReqContext,
 	}
 	return svresult, retErr
 
+}
+
+var CommonMessageMask = []string{
+	fmt.Sprintf("metadata.labels.\"%s\"", common.ResourceIntegrityLabelKey),
+	fmt.Sprintf("metadata.labels.\"%s\"", common.ReasonLabelKey),
+	"metadata.annotations.message",
+	"metadata.annotations.signature",
+	"metadata.annotations.certificate",
+	"metadata.annotations.signPaths",
+	"metadata.annotations.namespace",
+	"metadata.annotations.kubectl.\"kubernetes.io/last-applied-configuration\"",
+	"metadata.managedFields",
+	"metadata.creationTimestamp",
+	"metadata.generation",
+	"metadata.annotations.deprecated.daemonset.template.generation",
+	"metadata.namespace",
+	"metadata.resourceVersion",
+	"metadata.selfLink",
+	"metadata.uid",
 }
