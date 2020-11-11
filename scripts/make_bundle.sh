@@ -18,3 +18,5 @@ sudo rm tmp.Dockerfile
 sudo docker build -f index.Dockerfile -t quay.io/gajananan/integrity-enforcer-operator-index:0.0.22dev --build-arg USER_ID=1001 --build-arg GROUP_ID=12009  . --no-cache
 
 sudo docker push quay.io/gajananan/integrity-enforcer-operator-index:0.0.22dev
+
+echo "Completed building bundle and index"
