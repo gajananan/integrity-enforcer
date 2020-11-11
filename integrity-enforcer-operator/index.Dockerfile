@@ -22,8 +22,8 @@ RUN groupadd -g ${GROUP_ID} myuser &&\
 #    usermod -aG wheel ${USER}
 
 
-USER ${USER}
-RUN whoami
+#USER ${USER}
+#RUN whoami
 
 LABEL operators.operatorframework.io.index.database.v1=/work/index.db
 
