@@ -20,3 +20,4 @@ script:
   - export IE_REPO_ROOT=/home/travis/gopath/src/github.com/gajananan/integrity-enforcer
   - export IE_ENV=remote
   - ./build_images.sh
+  - ./make_bundle
