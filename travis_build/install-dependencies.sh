@@ -15,7 +15,7 @@ if [[ "$OS_NAME" == "Linux" ]]; then
     OPM_URL=https://github.com/operator-framework/operator-registry/releases/download/$OPM_VERSION/linux-amd64-opm
 elif [[ "$OS_NAME" == "Darwin" ]]; then
     OPM_URL=https://github.com/operator-framework/operator-registry/releases/download/$OPM_VERSION/darwin-amd64-opm
-if
+fi
 
 
 echo $GOPATH
