@@ -9,7 +9,7 @@ make bundle-build BUNDLE_IMG=quay.io/gajananan/integrity-enforcer-operator-bundl
 
 docker push quay.io/gajananan/integrity-enforcer-operator-bundle:0.0.22dev
 
-sudo opm index add -c docker --generate --bundles quay.io/gajananan/integrity-enforcer-operator-bundle:0.0.22dev \
+sudo $GOPATH/bin/opm index add -c docker --generate --bundles quay.io/gajananan/integrity-enforcer-operator-bundle:0.0.22dev \
                       --from-index quay.io/gajananan/integrity-enforcer-operator-index:0.0.21dev \
                       --tag quay.io/gajananan/integrity-enforcer-operator-index:0.0.22dev --out-dockerfile tmp.Dockerfile
 
