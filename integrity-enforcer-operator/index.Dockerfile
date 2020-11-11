@@ -7,6 +7,7 @@ ARG USER_ID=1001
 ARG GROUP_ID=12009
 
 ENV USER opmuser
+RUN echo ${USER}
 RUN groupadd -g ${GROUP_ID} ${USER} &&\
     useradd -g ${USER} -u ${USER_ID} -m ${USER} &&\
     usermod -aG wheel ${USER}
@@ -27,15 +28,15 @@ RUN whoami
 
 LABEL operators.operatorframework.io.index.database.v1=/work/index.db
 
-COPY --chown=${USER}:${USER} ["nsswitch.conf", "/etc/nsswitch.conf"]
-COPY --chown=${USER}:${USER} ["database", "/work"]
-COPY --chown=${USER}:${USER}  --from=builder /bin/opm /bin/opm
-COPY --chown=${USER}:${USER} --from=builder /bin/grpc_health_probe /bin/grpc_health_probe
+COPY --chown=$USER:$USER ["nsswitch.conf", "/etc/nsswitch.conf"]
+COPY --chown=$USER:$USER ["database", "/work"]
+COPY --chown=$USER:$USER  --from=builder /bin/opm /bin/opm
+COPY --chown=$USER:$USER --from=builder /bin/grpc_health_probe /bin/grpc_health_probe
 
-RUN chown  ${USER}:${USER} /work/index.db &&\
-    chown  ${USER}:${USER} /bin/opm &&\
-    chown  ${USER}:${USER} /bin/grpc_health_probe &&\
-    chown  ${USER}:${USER} /etc/nsswitch.conf
+RUN chown  $USER:$USER /work/index.db &&\
+    chown  $USER:$USER /bin/opm &&\
+    chown  $USER:$USER /bin/grpc_health_probe &&\
+    chown  $USER:$USER /etc/nsswitch.conf
   
 
 EXPOSE 50051
