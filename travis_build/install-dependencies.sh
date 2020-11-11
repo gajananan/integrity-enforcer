@@ -25,7 +25,8 @@ $GOPATH/bin/opm version
 
 
 if [[ "$OS_NAME" == "Linux" ]]; then
-    curl -s "https://raw.githubusercontent.com/\\nkubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+    curl -s "https://raw.githubusercontent.com/\
+             kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
 fi
 
 chmod +x ./kustomize
