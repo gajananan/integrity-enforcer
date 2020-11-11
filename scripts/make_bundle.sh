@@ -13,7 +13,7 @@ sudo $GOPATH/bin/opm index add -c docker --generate --bundles quay.io/gajananan/
                       --from-index quay.io/gajananan/integrity-enforcer-operator-index:0.0.21dev \
                       --tag quay.io/gajananan/integrity-enforcer-operator-index:0.0.22dev --out-dockerfile tmp.Dockerfile
 
-rm tmp.Dockerfile
+sudo rm tmp.Dockerfile
 
 sudo docker build -f index.Dockerfile -t quay.io/gajananan/integrity-enforcer-operator-index:0.0.22dev . --no-cache
 
