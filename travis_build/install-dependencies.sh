@@ -10,7 +10,7 @@ chmod +x operator-sdk-$OPERATOR_SDK_VERSION-x86_64-linux-gnu && sudo mkdir -p /u
 
 operator-sdk version
 
-OPM_VERSION=v1.13.8
+OPM_VERSION=v1.15.1
 
 if [[ "$OS_NAME" == "Linux" ]]; then
     OPM_URL=https://github.com/operator-framework/operator-registry/releases/download/$OPM_VERSION/linux-amd64-opm
@@ -23,4 +23,4 @@ echo $GOPATH
 wget -nv $OPM_URL -O $GOPATH/bin/opm
 chmod +x $GOPATH/bin/opm
 
-opm version
+$GOPATH/bin/opm version
