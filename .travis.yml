@@ -6,8 +6,8 @@ service:
 go:
   - 1.x
 
-before_install:
-  - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
+#before_install:
+#  - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.24.0
   
 script:
   - export TRAVIS_BUILD_DIR=/home/travis/gopath/src/github.com/gajananan/integrity-enforcer/travis_build
