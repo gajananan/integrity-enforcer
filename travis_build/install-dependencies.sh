@@ -19,7 +19,8 @@ elif [[ "$OS_NAME" == "Darwin" ]]; then
 if
 
 
-wget -nv $(OPM_URL) -O $(GOPATH)/bin/opm || (echo "wget returned $$? trying to fetch opm. please install opm and try again"; exit 1)
-chmod +x $(GOPATH)/bin/opm
+echo $GOPATH
+wget -nv $(OPM_URL) -O $GOPATH/bin/opm || (echo "wget returned $$? trying to fetch opm. please install opm and try again"; exit 1)
+chmod +x $GOPATH/bin/opm
 
 opm version
