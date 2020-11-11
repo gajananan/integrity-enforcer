@@ -15,6 +15,6 @@ sudo $GOPATH/bin/opm index add -c docker --generate --bundles quay.io/gajananan/
 
 sudo rm tmp.Dockerfile
 
-sudo docker build -f index.Dockerfile -t quay.io/gajananan/integrity-enforcer-operator-index:0.0.22dev . --no-cache
+sudo docker build -f index.Dockerfile -t quay.io/gajananan/integrity-enforcer-operator-index:0.0.22dev --build-arg USER_ID=1001 --build-arg GROUP_ID=12009  . --no-cache
 
 docker push quay.io/gajananan/integrity-enforcer-operator-index:0.0.22dev
