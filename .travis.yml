@@ -48,7 +48,10 @@ jobs:
          - export IE_REPO_ROOT=/home/travis/gopath/src/github.com/gajananan/integrity-enforcer
          - export IE_ENV=remote
          #- ./develop/scripts/build_images.sh
-         - ./develop/scripts/make_bundle.sh
+         #- ./develop/scripts/make_bundle.sh
+         - |
+            make build-images
+            make build-bundle
 
 # --------------------------Enable later -----------------------------------
 #        - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then export COMPONENT_TAG_EXTENSION="-PR${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}"; fi;
